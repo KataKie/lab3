@@ -2,6 +2,7 @@
 #
 
 from math import sqrt
+from numpy import corrcoef
 
 users = {
         "Ania": 
@@ -30,8 +31,9 @@ def manhattan(rating1, rating2):
     """Oblicz odległość w metryce taksówkowej między dwoma  zbiorami ocen
        danymi w postaci: {'The Strokes': 3.0, 'Slightly Stoopid': 2.5}
        Zwróć -1, gdy zbiory nie mają… wspólnych elementów"""
-       
+ 
     # TODO: wpisz kod
+    # kod
     klucze1 = rating1.keys()
     klucze2 = rating2.keys()
     odleglosc = 0
@@ -48,11 +50,44 @@ def manhattan(rating1, rating2):
         return -1
 
 def pearson(rating1, rating2):
+    klucze1 = users[rating1].keys()
+    klucze2 = users[rating2].keys()
     korelacja=0
-    
+    x=0
+    y=0
+    suma_x=0
+    suma_y=0
+    iloczyn_sumy=0
+    suma_iloczynow=0
+    korelacja_licznik=0
+    korelacja_mianownik=0
+    n=0
+    for key in klucze1:
+        for key1 in klucze2:
+            if key == key1:
+                n=n+1
+                x=users[rating1][key]
+                y=users[rating2][key1]
+                suma_x=suma_x+x
+                suma_y=suma_y+y
+            iloczyn_sumy=suma_x*suma_y
+            suma_iloczynow=suma_iloczynow+(x*y)
+    korelacja_licznik=korelacja_licznik+suma_iloczynow-(iloczyn_sumy/n)
+    korelacja_mianownik=(sqrt(suma_x**2-(suma_x**2/n)))*(sqrt(suma_y**2-(suma_y**2/n)))
+    korelacja=korelacja_licznik/korelacja_mianownik
     return korelacja
 
 def pearsonNumpy(rating1, rating2):
-    
     korelacja=0
+    
+    klucze1 = users[rating1].keys()
+    klucze2 = users[rating2].keys()
+    x=[]
+    y=[]
+    for key in klucze1:
+        for key1 in klucze2:
+            if key == key1:
+                x.append(users[rating1][key])
+                y.append(users[rating2][key1])
+    korelacja = corrcoef([x,y])[1,0]
     return korelacja
